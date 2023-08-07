@@ -1,0 +1,128 @@
+{
+	"name": "DF_SALES_DATA",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_Sales_Data",
+						"type": "DatasetReference"
+					},
+					"name": "SalesDataStream",
+					"description": "sales dataset"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Sales_Order_data",
+						"type": "DatasetReference"
+					},
+					"name": "SalesOrderDataStream"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_TARGET_ST_STAGE",
+						"type": "DatasetReference"
+					},
+					"name": "TargetDataSink"
+				}
+			],
+			"transformations": [
+				{
+					"name": "SalesJoinWithOrder"
+				},
+				{
+					"name": "Selectcolumnsafterjoin"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          SalesOrderLineKey as string,",
+				"          ResellerKey as string,",
+				"          CustomerKey as string,",
+				"          ProductKey as string,",
+				"          OrderDateKey as string,",
+				"          DueDateKey as string,",
+				"          ShipDateKey as string,",
+				"          SalesTerritoryKey as string,",
+				"          {Order Quantity} as string,",
+				"          {Unit Price} as string,",
+				"          {Extended Amount} as string,",
+				"          {Unit Price Discount Pct} as string,",
+				"          {Product Standard Cost} as string,",
+				"          {Total Product Cost} as string,",
+				"          {Sales Amount} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> SalesDataStream",
+				"source(output(",
+				"          Channel as string,",
+				"          SalesOrderLineKey as string,",
+				"          {Sales Order} as string,",
+				"          {Sales Order Line} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     partitionBy('roundRobin', 2)) ~> SalesOrderDataStream",
+				"SalesDataStream, SalesOrderDataStream join(SalesDataStream@SalesOrderLineKey == SalesOrderDataStream@SalesOrderLineKey,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> SalesJoinWithOrder",
+				"SalesJoinWithOrder select(mapColumn(",
+				"          SalesOrderLineKey = SalesDataStream@SalesOrderLineKey,",
+				"          ResellerKey,",
+				"          CustomerKey,",
+				"          ProductKey,",
+				"          OrderDateKey,",
+				"          DueDateKey,",
+				"          ShipDateKey,",
+				"          SalesTerritoryKey,",
+				"          {Order Quantity},",
+				"          {Unit Price},",
+				"          {Extended Amount},",
+				"          {Unit Price Discount Pct},",
+				"          {Product Standard Cost},",
+				"          {Total Product Cost},",
+				"          {Sales Amount},",
+				"          Channel,",
+				"          {Sales Order},",
+				"          {Sales Order Line}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> Selectcolumnsafterjoin",
+				"Selectcolumnsafterjoin sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     mapColumn(",
+				"          SalesOrderLineKey,",
+				"          ResellerKey,",
+				"          CustomerKey,",
+				"          ProductKey,",
+				"          OrderDateKey,",
+				"          DueDateKey,",
+				"          ShipDateKey,",
+				"          SalesTerritoryKey,",
+				"          {Order Quantity},",
+				"          {Unit Price},",
+				"          {Extended Amount},",
+				"          {Unit Price Discount Pct},",
+				"          {Product Standard Cost},",
+				"          {Total Product Cost},",
+				"          {Sales Amount},",
+				"          Channel,",
+				"          {Sales Order},",
+				"          {Sales Order Line}",
+				"     )) ~> TargetDataSink"
+			]
+		}
+	}
+}
