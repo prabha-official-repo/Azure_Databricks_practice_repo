@@ -1,0 +1,115 @@
+{
+	"name": "PL_TRAINING_ADB_NOTEBOOK_TRIGGER",
+	"properties": {
+		"activities": [
+			{
+				"name": "Calling ADB Spark Notebook",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Start of the pipeline",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Shared/Working_Dir/nb_using_spark",
+					"baseParameters": {
+						"sourcefilepath": "/mnt/dev/organizations-10000_1.csv",
+						"targetfilepath": "dbfs:/Azure_Training/org_file"
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_training_adb_connection",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Start of the pipeline",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "start_time",
+					"value": {
+						"value": "@utcnow()",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "end of the pipeline",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Calling ADB SQl Notebook",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "end_time",
+					"value": {
+						"value": "@utcnow()",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Calling ADB SQl Notebook",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Calling ADB Spark Notebook",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Shared/Working_Dir/nb_using_sql"
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_training_adb_connection",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"variables": {
+			"end_time": {
+				"type": "String"
+			},
+			"start_time": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	}
+}
