@@ -1,0 +1,9 @@
+{
+	"name": "adfdevaztraining",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "76c441c9-1119-4224-b458-67401d789068",
+		"tenantId": "212495af-5ba4-4e31-8511-40118051eaaf"
+	}
+}

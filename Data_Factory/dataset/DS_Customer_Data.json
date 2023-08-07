@@ -1,0 +1,54 @@
+{
+	"name": "DS_Customer_Data",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_training_dev",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Customer_data.csv",
+				"folderPath": "source/date",
+				"fileSystem": "dev-container"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "CustomerKey",
+				"type": "String"
+			},
+			{
+				"name": "Customer ID",
+				"type": "String"
+			},
+			{
+				"name": "Customer",
+				"type": "String"
+			},
+			{
+				"name": "City",
+				"type": "String"
+			},
+			{
+				"name": "State-Province",
+				"type": "String"
+			},
+			{
+				"name": "Country-Region",
+				"type": "String"
+			},
+			{
+				"name": "Postal Code",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

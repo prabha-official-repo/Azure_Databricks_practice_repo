@@ -1,0 +1,86 @@
+{
+	"name": "DS_Sales_Data",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_training_dev",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Sales_data.csv",
+				"folderPath": "source/date",
+				"fileSystem": "dev-container"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "SalesOrderLineKey",
+				"type": "String"
+			},
+			{
+				"name": "ResellerKey",
+				"type": "String"
+			},
+			{
+				"name": "CustomerKey",
+				"type": "String"
+			},
+			{
+				"name": "ProductKey",
+				"type": "String"
+			},
+			{
+				"name": "OrderDateKey",
+				"type": "String"
+			},
+			{
+				"name": "DueDateKey",
+				"type": "String"
+			},
+			{
+				"name": "ShipDateKey",
+				"type": "String"
+			},
+			{
+				"name": "SalesTerritoryKey",
+				"type": "String"
+			},
+			{
+				"name": "Order Quantity",
+				"type": "String"
+			},
+			{
+				"name": "Unit Price",
+				"type": "String"
+			},
+			{
+				"name": "Extended Amount",
+				"type": "String"
+			},
+			{
+				"name": "Unit Price Discount Pct",
+				"type": "String"
+			},
+			{
+				"name": "Product Standard Cost",
+				"type": "String"
+			},
+			{
+				"name": "Total Product Cost",
+				"type": "String"
+			},
+			{
+				"name": "Sales Amount",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
