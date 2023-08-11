@@ -8,7 +8,7 @@ configs_gen2_dev = {"fs.azure.account.auth.type": "OAuth",
 
 # COMMAND ----------
 
-#dbutils.fs.unmount("/mnt/dev/")
+dbutils.fs.unmount("/mnt/dev/")
 
 # COMMAND ----------
 
