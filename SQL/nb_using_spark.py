@@ -20,7 +20,7 @@ def remove_bda_chars_from_columns(df):
 # DBTITLE 1,Reading from Azure Data lake using PySpark
 
 #/mnt/dev/organizations-10000_1.csv
-org_df = spark.read.option("delimiter",",").option("header",True).csv(f"/mnt/dev/organizations-10000_1.csv")
+org_df = spark.read.option("delimiter",",").option("header",True).csv(f"{source_path}")
 org_df.withColumnRenamed("Organization Id","Organization_Id").withColumnRenamed("Number of employees","Number_of_employees")
 display(org_df)
 final_df=remove_bda_chars_from_columns(org_df)
@@ -37,7 +37,7 @@ final_df=remove_bda_chars_from_columns(org_df)
 
 
 #dbfs:/Azure_Training/org_file
-final_df.write.mode("overwrite").format("delta").option("header",True).save(f"dbfs:/Azure_Training/org_file")
+final_df.write.mode("overwrite").format("delta").option("header",True).save(f"{target_path}")
 
 # COMMAND ----------
 
