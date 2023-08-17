@@ -31,33 +31,6 @@ target_df.createOrReplaceTempView("target")
 
 # COMMAND ----------
 
-
-#name","address","effective_date"]
-inc_data_df.alias('source') \
-  .merge(
-    target_df.alias('target'),
-    'surce.id = target.id'
-  ) \
-  .whenMatchedUpdate(set =
-    {
-      "id": "target.id",
-      "name": "target.name",
-      "address": "target.address",
-      "effective_date": "target.effective_date"
-    }
-  ) \
-  .whenNotMatchedInsert(values =
-    {
-      "id": "target.id",
-      "name": "target.name",
-      "address": "target.address",
-      "effective_date": "target.effective_date"
-    }
-  ) \
-  .execute()
-
-# COMMAND ----------
-
 display(spark.sql("""
     SELECT
         COALESCE(t.id, s.id) AS id,
@@ -82,4 +55,28 @@ display(spark.sql("""
 
 # COMMAND ----------
 
+# DBTITLE 1,Using Merge scd type2
 
+#name","address","effective_date"]
+inc_data_df.alias('source') \
+  .merge(
+    target_df.alias('target'),
+    'surce.id = target.id'
+  ) \
+  .whenMatchedUpdate(set =
+    {
+      "id": "target.id",
+      "name": "target.name",
+      "address": "target.address",
+      "effective_date": "target.effective_date"
+    }
+  ) \
+  .whenNotMatchedInsert(values =
+    {
+      "id": "target.id",
+      "name": "target.name",
+      "address": "target.address",
+      "effective_date": "target.effective_date"
+    }
+  ) \
+  .execute()
