@@ -1,0 +1,12 @@
+source_data = [
+    ('DELHI', 'GOA', 10),
+    ('GOA', 'DELHI', 7),
+    ('MUMBAI', 'CALCUTTA', 5),
+    ('CHENNAI', 'PUNE', 3),
+    ('BANGALORE', 'BHOPAL', 7),
+    ('KOLKOTA', 'PATNA', 9),
+    ('BHOPAL', 'BANGALORE', 2),
+    ('PUNE', 'CHENNAI', 4),
+    ('CALCUTTA', 'MUMBAI', 7)
+]
+source_df = spark.createDataFrame(source_data, ["SOURCE", "DESTINATION", "FREQUENCY"])
